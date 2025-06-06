@@ -44,4 +44,4 @@ Longevity is the new luxury.
 Performance is the new identity.  
 **Metrax** helps you engineer both.
 
-[🔗 Explore the live leaderboard → leanaileaderboard.com](https://leanaileaderboard.com)
+[🔗 Explore the live leaderboard → xxx](https://xxx.com)
