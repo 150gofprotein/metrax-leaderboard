@@ -45,9 +45,13 @@
               <div class="text-lg font-semibold">${medal} ${index + 1}. ${f.Alias || 'Anonymous'}</div>
               <div class="mt-2 flex gap-2">
 
-               <span class="badge badge-fitness">Fitness ${f['Fitness Score'] ?? 'n/a'}</span>
+              <span class="badge badge-overall">Overall ${f['Overall Score'] ?? 'n/a'}</span>
+                <span class="badge badge-energy">Energy & Focus ${f['Energy & Focus Score'] ?? 'n/a'}</span>
+                <span class="badge badge-mental">Mental Resilience ${f['Mental Resilience Score'] ?? 'n/a'}</span>
+                <span class="badge badge-fitness">Fitness ${f['Fitness Score'] ?? 'n/a'}</span>
+                <span class="badge badge-sleep">Sleep ${f['Sleep & Recovery Score'] ?? 'n/a'}</span>
                 <span class="badge badge-heart">Heart ${f['Heart & Metabolic Score'] ?? 'n/a'}</span>
-                <span class="badge badge-mental">Mental ${f['Mental Resilience Score'] ?? 'n/a'}</span>
+                <span class="badge badge-aging">Pace of Aging ${f['Pace of Aging Score'] ?? 'n/a'}</span>
 
                 
               <div><strong>Overall Score:</strong> ${f['Overall Score'] ?? 'n/a'}</div>
