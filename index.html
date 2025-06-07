@@ -38,10 +38,13 @@
 
       data.records.forEach((record, index) => {
         const f = record.fields;
+        const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '';
         const html = `
-          <div class="metric-box">
-            <div class="font-semibold text-lg mb-2">#${index + 1} - ${f.Alias || 'Anonymous'}</div>
-            <div class="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+          <div class="bg-white rounded-xl shadow-md p-4 flex items-center justify-between">
+            <div>
+              <div class="text-lg font-semibold">${medal} ${index + 1}. ${f.Alias || 'Anonymous'}</div>
+              <div class="mt-2 flex gap-2">
+              
               <div><strong>Overall Score:</strong> ${f['Overall Score'] ?? 'n/a'}</div>
               <div><strong>Energy & Focus:</strong> ${f['Energy & Focus Score'] ?? 'n/a'}</div>
               <div><strong>Fitness:</strong> ${f['Fitness Score'] ?? 'n/a'}</div>
