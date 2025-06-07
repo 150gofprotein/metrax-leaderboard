@@ -39,7 +39,7 @@ All scored, visualized, and ranked — so you can see exactly how you measure up
 
 ---
 
-### 🌐 Join the Movement
+### 🌐 Join Metrax
 Longevity is the new luxury.  
 Performance is the new identity.  
 **Metrax** helps you engineer both.
