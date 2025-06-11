@@ -7,65 +7,64 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Inter', sans-serif; background-color: #f8f9fa; }
-    .badge { border-radius: 9999px; padding: 2px 10px; font-weight: 500; font-size: 0.875rem; color: white; }
-   
-    .badge-overall {
-      background: linear-gradient(to right, #3b82f6, #6366f1);
-    }
-    .badge-fitness {
-      background: linear-gradient(to right, #4ade80, #16a34a);
-    }
-    .badge-heart {
-      background: linear-gradient(to right, #ef4444, #f97316);
-    }
-    .badge-mental {
-      background: linear-gradient(to right, #10b981, #22d3ee);
-    }
-    .badge-sleep {
-      background: linear-gradient(to right, #8b5cf6, #3b82f6);
-    }
-    .badge-aging {
-      background: linear-gradient(to right, #facc15, #f59e0b);
-    }
-    .badge-energy {
-      background: linear-gradient(to right, #06b6d4, #3b82f6);
-    }
-    .badge-updated {
-      background: linear-gradient(to right, #64748b, #94a3b8);
-    }
-  </style>
+  body {
+    font-family: 'Inter', sans-serif;
+    background-color: #0d1117;
+    color: #ffffff;
+  }
 
-  
-</head>
+  .leaderboard-card {
+    background-color: #161b22;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 0 10px #0ea5e9;
+  }
 
-  <body class="min-h-screen p-6 flex justify-center">
+  .neon-text {
+    font-weight: 600;
+    color: #3b82f6;
+    text-shadow: 0 0 5px #3b82f6;
+  }
 
-    
- <!-- CTA -->   
-  <div class="absolute top-6 right-6">
-    <a href="https://tally.so/r/nG4zjj" target="_blank" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-full shadow">
-      🧬 See Where You Rank
-    </a>
+  .avatar {
+    border-radius: 9999px;
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+  }
+
+  .table-header {
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #cbd5e1;
+    font-size: 0.75rem;
+  }
+
+  .glow-box {
+    background-color: #1f2937;
+    border-radius: 0.75rem;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    border: 1px solid #3b82f6;
+  }
+</style>
+
+<div class="max-w-5xl mx-auto mt-8">
+  <h1 class="text-center text-4xl font-bold neon-text mb-10">LEADERSHIP BOARD</h1>
+
+  <div class="grid grid-cols-8 gap-4 text-center table-header mb-4">
+    <div>RANK</div>
+    <div></div>
+    <div>NAME</div>
+    <div>FOCUS</div>
+    <div>RESILIENCE</div>
+    <div>SLEEP</div>
+    <div>FITNESS</div>
+    <div>HEART</div>
   </div>
-    
-  <!-- title -->      
-<body class="min-h-screen p-6 flex justify-center">
-  <div class="max-w-5xl w-full">
-    <h1 class="text-3xl font-bold mb-6 text-center">🧬 Metrax Leaderboard</h1>
-    
-    <!-- filter -->
-    <div class="flex justify-center gap-4 mb-6">
-<select id="cityFilter" class="px-4 py-2 rounded border">
-  <option value="">All Cities</option>
-</select>
-<select id="genderFilter" class="px-4 py-2 rounded border">
-  <option value="">All Genders</option>
-</select>
+
+  <div id="leaderboard" class="space-y-4"></div>
 </div>
-    
-    <div id="leaderboard" class="space-y-4"></div>
-  </div>
 
    <!-- scores -->   
  <script>
