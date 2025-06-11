@@ -67,91 +67,49 @@
 </div>
 
    <!-- scores -->   
- <script>
+<script>
   const API_KEY = 'patmCpxVe4M9Sbr7k.e07989b447f501528661d099d8ed046947fd31345fc6f6de4d99b49559dc38de';
   const BASE_ID = 'appwfMmuxK6Pu0JeR';
   const TABLE_NAME = 'Biomarker Scores';
 
-  let allRecords = [];
-
-  const populateFilters = (records) => {
-    const cityFilter = document.getElementById('cityFilter');
-    const genderFilter = document.getElementById('genderFilter');
-
-    const cities = [...new Set(records.map(r => r.fields.City).filter(Boolean))].sort();
-    const genders = [...new Set(records.map(r => r.fields.Gender).filter(Boolean))].sort();
-
-    cities.forEach(city => {
-      const opt = document.createElement('option');
-      opt.value = city;
-      opt.textContent = city;
-      cityFilter.appendChild(opt);
+  async function fetchLeaderboard() {
+    const res = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(TABLE_NAME)}?sort[0][field]=Overall%20Score&sort[0][direction]=desc`, {
+      headers: { Authorization: `Bearer ${API_KEY}` }
     });
 
-    genders.forEach(gender => {
-      const opt = document.createElement('option');
-      opt.value = gender;
-      opt.textContent = gender;
-      genderFilter.appendChild(opt);
-    });
-  };
-
-  const applyFilters = () => {
-    const city = document.getElementById('cityFilter').value;
-    const gender = document.getElementById('genderFilter').value;
+    const data = await res.json();
+    const leaderboard = data.records;
     const container = document.getElementById('leaderboard');
-
-    const filtered = allRecords.filter(r => {
-      const f = r.fields;
-      const cityMatch = !city || f.City === city;
-      const genderMatch = !gender || f.Gender === gender;
-      return cityMatch && genderMatch;
-    });
-
     container.innerHTML = '';
-    filtered.forEach((record, index) => {
+
+    leaderboard.forEach((record, i) => {
       const f = record.fields;
-      const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '';
+      const name = f.Alias || 'Anonymous';
+      const focus = f['Energy & Focus Score'] ?? 'n/a';
+      const resilience = f['Mental Resilience Score'] ?? 'n/a';
+      const sleep = f['Sleep & Recovery Score'] ?? 'n/a';
+      const fitness = f['Fitness Score'] ?? 'n/a';
+      const heart = f['Heart & Metabolic Score'] ?? 'n/a';
+      const image = f['Avatar URL'] || `https://api.dicebear.com/7.x/thumbs/svg?seed=${name}`;
+
       const html = `
-        <div class="bg-white rounded-xl shadow-md p-4 flex items-center justify-between">
-          <div>
-            <div class="text-lg font-semibold">${medal} ${index + 1}. ${f.Alias || 'Anonymous'}</div>
-            <div class="mt-2 flex gap-2 flex-wrap">
-              <span class="badge badge-overall">Overall ${f['Overall Score'] ?? 'n/a'}</span>
-              <span class="badge badge-energy">Energy & Focus ${f['Energy & Focus Score'] ?? 'n/a'}</span>
-              <span class="badge badge-mental">Mental Resilience ${f['Mental Resilience Score'] ?? 'n/a'}</span>
-              <span class="badge badge-fitness">Fitness ${f['Fitness Score'] ?? 'n/a'}</span>
-              <span class="badge badge-sleep">Sleep ${f['Sleep & Recovery Score'] ?? 'n/a'}</span>
-              <span class="badge badge-heart">Heart ${f['Heart & Metabolic Score'] ?? 'n/a'}</span>
-              <span class="badge badge-aging">Pace of Aging ${f['Pace of Aging Score'] ?? 'n/a'}</span>
-              <span class="badge badge-updated">Updated: ${f['Score Date'] ?? 'n/a'}</span>
-            </div>
-          </div>
+        <div class="grid grid-cols-8 gap-4 items-center glow-box">
+          <div class="text-xl font-bold text-blue-400">#${i + 1}</div>
+          <div><img class="avatar" src="${image}" alt="${name}" /></div>
+          <div class="font-semibold">${name}</div>
+          <div>${focus}</div>
+          <div>${resilience}</div>
+          <div>${sleep}</div>
+          <div>${fitness}</div>
+          <div>${heart}</div>
         </div>
       `;
       container.insertAdjacentHTML('beforeend', html);
     });
-  };
-
-  const fetchLeaderboard = async () => {
-    const url = `https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(TABLE_NAME)}?sort[0][field]=Overall%20Score&sort[0][direction]=desc`;
-    const res = await fetch(url, {
-      headers: {
-        Authorization: `Bearer ${API_KEY}`
-      }
-    });
-
-    const data = await res.json();
-    allRecords = data.records;
-
-    populateFilters(allRecords);
-    applyFilters();
-  };
-
-  document.getElementById('cityFilter').addEventListener('change', applyFilters);
-  document.getElementById('genderFilter').addEventListener('change', applyFilters);
+  }
 
   fetchLeaderboard();
 </script>
+
 </body>
 </html>
