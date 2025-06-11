@@ -79,10 +79,6 @@
     const cityFilter = document.getElementById('cityFilter');
     const genderFilter = document.getElementById('genderFilter');
 
-      // Clear existing options (if any) except the default
-  cityFilter.innerHTML = '<option value="">All Cities</option>';
-  genderFilter.innerHTML = '<option value="">All Genders</option>';
-
    // Use Set to extract unique values
   const cities = [...new Set(records.map(r => r.fields.City?.trim()).filter(Boolean))].sort();
   const genders = [...new Set(records.map(r => r.fields.Gender?.trim()).filter(Boolean))].sort();
