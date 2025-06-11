@@ -5,117 +5,118 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Metrax Leaderboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: #0f172a;
-      color: white;
-    }
+  body {
+    font-family: 'Inter', sans-serif;
+    background-color: #0d1117;
+    color: #ffffff;
+  }
 
-    @keyframes slide-in {
-      0% { opacity: 0; transform: translateY(20px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
+  .leaderboard-card {
+    background-color: #161b22;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 0 10px #0ea5e9;
+  }
 
-    .animate-slide-in {
-      animation: slide-in 0.6s ease forwards;
-    }
-  </style>
-</head>
+  .neon-text {
+    font-weight: 600;
+    color: #3b82f6;
+    text-shadow: 0 0 5px #3b82f6;
+  }
 
-<body class="min-h-screen py-10 px-4">
-  <!-- CTA -->
+  .avatar {
+    border-radius: 9999px;
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+  }
+
+  .table-header {
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #cbd5e1;
+    font-size: 0.75rem;
+  }
+
+  .glow-box {
+    background-color: #1f2937;
+    border-radius: 0.75rem;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    border: 1px solid #3b82f6;
+  }
+</style>
+  
+   <!-- CTA -->   
   <div class="absolute top-6 right-6">
     <a href="https://tally.so/r/nG4zjj" target="_blank" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-full shadow">
-      🚀 See Where You Rank
+      🧬 See Where You Rank
     </a>
   </div>
 
-  <!-- Title -->
-  <div class="max-w-6xl mx-auto">
-    <h1 class="text-center text-4xl font-extrabold text-blue-400 mb-6 drop-shadow-md">Metrax LEADERBOARD</h1>
+<div class="max-w-5xl mx-auto mt-8">
+  <h1 class="text-center text-4xl font-bold neon-text mb-10">Metrax LEADERBOARD</h1>
 
-    <!-- Header -->
-    <div class="grid grid-cols-8 gap-4 text-sm text-slate-300 uppercase tracking-wide mb-4">
-      <div>Rank</div>
-      <div></div>
-      <div>Name</div>
-      <div>Focus</div>
-      <div>Resilience</div>
-      <div>Sleep</div>
-      <div>Fitness</div>
-      <div>Heart</div>
-    </div>
-
-    <!-- Leaderboard -->
-    <div id="leaderboard" class="space-y-3"></div>
+  <div class="grid grid-cols-8 gap-4 text-center table-header mb-4">
+    <div>RANK</div>
+    <div></div>
+    <div>NAME</div>
+    <div>FOCUS</div>
+    <div>RESILIENCE</div>
+    <div>SLEEP</div>
+    <div>FITNESS</div>
+    <div>HEART</div>
   </div>
 
-  <!-- Script -->
-  <script>
-    const API_KEY = 'YOUR_API_KEY';
-    const BASE_ID = 'YOUR_BASE_ID';
-    const TABLE_NAME = 'Biomarker Scores';
+  <div id="leaderboard" class="space-y-4"></div>
+</div>
 
-    async function fetchLeaderboard() {
-      const res = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(TABLE_NAME)}?sort[0][field]=Overall%20Score&sort[0][direction]=desc`, {
-        headers: { Authorization: `Bearer ${API_KEY}` }
-      });
+   <!-- scores -->   
+<script>
+  const API_KEY = 'patmCpxVe4M9Sbr7k.e07989b447f501528661d099d8ed046947fd31345fc6f6de4d99b49559dc38de';
+  const BASE_ID = 'appwfMmuxK6Pu0JeR';
+  const TABLE_NAME = 'Biomarker Scores';
 
-      const data = await res.json();
-      const leaderboard = data.records;
-      const container = document.getElementById('leaderboard');
-      container.innerHTML = '';
+  async function fetchLeaderboard() {
+    const res = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(TABLE_NAME)}?sort[0][field]=Overall%20Score&sort[0][direction]=desc`, {
+      headers: { Authorization: `Bearer ${API_KEY}` }
+    });
 
-      const metrics = ['Energy & Focus Score', 'Mental Resilience Score', 'Sleep & Recovery Score', 'Fitness Score', 'Heart & Metabolic Score'];
-      const scoreSums = [0, 0, 0, 0, 0];
-      const scoreMax = [0, 0, 0, 0, 0];
+    const data = await res.json();
+    const leaderboard = data.records;
+    const container = document.getElementById('leaderboard');
+    container.innerHTML = '';
 
-      leaderboard.forEach((user, i) => {
-        const f = user.fields;
-        const name = f.Alias || 'Anonymous';
-        const image = f['Avatar URL'] || `https://api.dicebear.com/7.x/thumbs/svg?seed=${name}`;
-        const scores = metrics.map((key, idx) => {
-          const val = f[key] ?? 0;
-          scoreSums[idx] += val;
-          if (val > scoreMax[idx]) scoreMax[idx] = val;
-          return val;
-        });
+    leaderboard.forEach((record, i) => {
+      const f = record.fields;
+      const name = f.Alias || 'Anonymous';
+      const focus = f['Energy & Focus Score'] ?? 'n/a';
+      const resilience = f['Mental Resilience Score'] ?? 'n/a';
+      const sleep = f['Sleep & Recovery Score'] ?? 'n/a';
+      const fitness = f['Fitness Score'] ?? 'n/a';
+      const heart = f['Heart & Metabolic Score'] ?? 'n/a';
+      const image = f['Avatar URL'] || `https://api.dicebear.com/7.x/thumbs/svg?seed=${name}`;
 
-        const isTopRank = i === 0;
-        const trophy = isTopRank ? '🏆 ' : '';
-
-        const html = `
-          <div class="grid grid-cols-8 gap-4 items-center bg-slate-800/50 rounded-xl py-3 px-4 border border-blue-600 animate-slide-in">
-            <div class="text-blue-400 font-bold">#${i + 1}</div>
-            <div><img class="w-8 h-8 rounded-full" src="${image}" alt="${name}" /></div>
-            <div class="font-semibold text-white">${trophy}${name}</div>
-            ${scores.map((val, idx) => `
-              <div class="text-center ${val === scoreMax[idx] ? 'text-lime-400 font-bold' : ''}">${val}</div>
-            `).join('')}
-          </div>
-        `;
-        container.insertAdjacentHTML('beforeend', html);
-      });
-
-      // Average Row
-      const total = leaderboard.length;
-      const avgScores = scoreSums.map(s => Math.round(s / total));
-      const avgRow = `
-        <div class="grid grid-cols-8 gap-4 items-center bg-slate-900/60 rounded-xl py-3 px-4 border-t border-blue-400 mt-6">
-          <div class="text-slate-300 text-sm font-medium">AVG</div>
-          <div></div>
-          <div class="text-slate-300 text-sm font-medium">All Users</div>
-          ${avgScores.map(val => `
-            <div class="text-center text-slate-300 font-medium">${val}</div>
-          `).join('')}
+      const html = `
+        <div class="grid grid-cols-8 gap-4 items-center glow-box">
+          <div class="text-xl font-bold text-blue-400">#${i + 1}</div>
+          <div><img class="avatar" src="${image}" alt="${name}" /></div>
+          <div class="font-semibold">${name}</div>
+          <div>${focus}</div>
+          <div>${resilience}</div>
+          <div>${sleep}</div>
+          <div>${fitness}</div>
+          <div>${heart}</div>
         </div>
       `;
-      container.insertAdjacentHTML('beforeend', avgRow);
-    }
+      container.insertAdjacentHTML('beforeend', html);
+    });
+  }
 
-    fetchLeaderboard();
-  </script>
+  fetchLeaderboard();
+</script>
+
 </body>
 </html>
