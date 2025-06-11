@@ -42,19 +42,19 @@
   <body class="min-h-screen p-6 flex justify-center">
 
     
- // CTA  
+ <!-- CTA -->   
   <div class="absolute top-6 right-6">
     <a href="https://tally.so/r/nG4zjj" target="_blank" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-full shadow">
       🧬 See Where You Rank
     </a>
   </div>
     
-  // title     
+  <!-- title -->      
 <body class="min-h-screen p-6 flex justify-center">
   <div class="max-w-5xl w-full">
     <h1 class="text-3xl font-bold mb-6 text-center">🧬 Metrax Leaderboard</h1>
     
-    // filter
+    <!-- filter -->
     <div class="flex justify-center gap-4 mb-6">
 <select id="cityFilter" class="px-4 py-2 rounded border">
   <option value="">All Cities</option>
@@ -67,7 +67,7 @@
     <div id="leaderboard" class="space-y-4"></div>
   </div>
 
-  // Get data from Airtable   
+   <!-- scores -->   
  <script>
   const API_KEY = 'patmCpxVe4M9Sbr7k.e07989b447f501528661d099d8ed046947fd31345fc6f6de4d99b49559dc38de';
   const BASE_ID = 'appwfMmuxK6Pu0JeR';
@@ -76,31 +76,26 @@
   let allRecords = [];
 
   const populateFilters = (records) => {
-  const cityFilter = document.getElementById('cityFilter');
-  const genderFilter = document.getElementById('genderFilter');
+    const cityFilter = document.getElementById('cityFilter');
+    const genderFilter = document.getElementById('genderFilter');
 
-  // Clear existing options (if any) except the default
-  cityFilter.innerHTML = '<option value="">All Cities</option>';
-  genderFilter.innerHTML = '<option value="">All Genders</option>';
+    const cities = [...new Set(records.map(r => r.fields.City).filter(Boolean))].sort();
+    const genders = [...new Set(records.map(r => r.fields.Gender).filter(Boolean))].sort();
 
-  // Use Set to extract unique values
-  const cities = [...new Set(records.map(r => r.fields.City?.trim()).filter(Boolean))].sort();
-  const genders = [...new Set(records.map(r => r.fields.Gender?.trim()).filter(Boolean))].sort();
+    cities.forEach(city => {
+      const opt = document.createElement('option');
+      opt.value = city;
+      opt.textContent = city;
+      cityFilter.appendChild(opt);
+    });
 
-  cities.forEach(city => {
-    const opt = document.createElement('option');
-    opt.value = city;
-    opt.textContent = city;
-    cityFilter.appendChild(opt);
-  });
-
-  genders.forEach(gender => {
-    const opt = document.createElement('option');
-    opt.value = gender;
-    opt.textContent = gender;
-    genderFilter.appendChild(opt);
-  });
-};
+    genders.forEach(gender => {
+      const opt = document.createElement('option');
+      opt.value = gender;
+      opt.textContent = gender;
+      genderFilter.appendChild(opt);
+    });
+  };
 
   const applyFilters = () => {
     const city = document.getElementById('cityFilter').value;
