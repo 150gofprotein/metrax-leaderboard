@@ -72,7 +72,25 @@
     const API_KEY = 'patmCpxVe4M9Sbr7k.e07989b447f501528661d099d8ed046947fd31345fc6f6de4d99b49559dc38de';
     const BASE_ID = 'appwfMmuxK6Pu0JeR';
     const TABLE_NAME = 'Biomarker Scores';
+    const populateFilters = (records) => {
+    const cityFilter = document.getElementById('cityFilter');
+    const genderFilter = document.getElementById('genderFilter');
+    const cities = [...new Set(records.map(r => r.fields.City).filter(Boolean))].sort();
+    const genders = [...new Set(records.map(r => r.fields.Gender).filter(Boolean))].sort();
+    cities.forEach(city => {
+    const opt = document.createElement('option');
+    opt.value = city;
+    opt.textContent = city;
+    cityFilter.appendChild(opt);
+  });
 
+  genders.forEach(gender => {
+    const opt = document.createElement('option');
+    opt.value = gender;
+    opt.textContent = gender;
+    genderFilter.appendChild(opt);
+  });
+};
     const fetchLeaderboard = async () => {
       const url = `https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(TABLE_NAME)}?sort[0][field]=Overall%20Score&sort[0][direction]=desc`;
       const res = await fetch(url, {
