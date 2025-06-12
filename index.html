@@ -6,121 +6,128 @@
   <title>Metrax Leaderboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            background: '#0d0d0d',
+            card: '#1a1a1a',
+            border: '#333',
+            primary: '#d1d5db',
+            highlight: '#60a5fa'
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+
   <style>
-  body {
-    font-family: 'Inter', sans-serif;
-    background-color: #0d1117;
-    color: #ffffff;
-  }
+    body {
+      background-color: #0d0d0d;
+      color: #d1d5db;
+      font-family: 'Inter', sans-serif;
+    }
 
-  .leaderboard-card {
-    background-color: #161b22;
-    border-radius: 1rem;
-    padding: 1.5rem;
-    box-shadow: 0 0 10px #0ea5e9;
-  }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
 
-  .neon-text {
-    font-weight: 600;
-    color: #3b82f6;
-    text-shadow: 0 0 5px #3b82f6;
-  }
+    th, td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid #333;
+    }
 
-  .avatar {
-    border-radius: 9999px;
-    width: 40px;
-    height: 40px;
-    object-fit: cover;
-  }
+    th {
+      color: #9ca3af;
+      font-weight: 600;
+    }
 
-  .table-header {
-    font-weight: 600;
-    text-transform: uppercase;
-    color: #cbd5e1;
-    font-size: 0.75rem;
-  }
+    tr:hover {
+      background-color: #1f2937;
+      cursor: pointer;
+    }
 
-  .glow-box {
-    background-color: #1f2937;
-    border-radius: 0.75rem;
-    padding: 1rem;
-    margin-bottom: 0.75rem;
-    border: 1px solid #3b82f6;
-  }
-</style>
-  
-   <!-- CTA -->   
-  <div class="absolute top-6 right-6">
-    <a href="https://tally.so/r/nG4zjj" target="_blank" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-full shadow">
-      🧬 See Where You Rank
-    </a>
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 9999px;
+      object-fit: cover;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex items-center justify-center px-4">
+  <div class="max-w-5xl w-full">
+    <h1 class="text-3xl font-bold text-white text-center mb-4">🧬 Metrax Leaderboard</h1>
+    <p class="text-center text-gray-400 mb-6">Rank famous founders and athletes based on 5 health scores</p>
+
+    <div class="overflow-x-auto rounded-lg border border-border bg-card shadow">
+      <table>
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Name</th>
+            <th>Focus</th>
+            <th>Mental Resilience</th>
+            <th>Sleep</th>
+            <th>Fitness</th>
+            <th>Heart</th>
+          </tr>
+        </thead>
+        <tbody id="leaderboard-body"></tbody>
+      </table>
+    </div>
   </div>
 
-<div class="max-w-6xl mx-auto mt-10 px-4">
-  <!-- Title -->
-  <h1 class="text-center text-4xl font-extrabold text-blue-400 mb-6 drop-shadow-md">Metrax LEADERBOARD</h1>
+  <script>
+    const API_KEY = 'patmCpxVe4M9Sbr7k.e07989b447f501528661d099d8ed046947fd31345fc6f6de4d99b49559dc38de';
+    const BASE_ID = 'appwfMmuxK6Pu0JeR';
+    const TABLE_NAME = 'Biomarker Scores';
 
-  <!-- Header Row -->
-  <div class="grid grid-cols-8 gap-4 text-sm text-slate-300 uppercase tracking-wide mb-4">
-    <div>Rank</div>
-    <div> </div>
-    <div>Name</div>
-    <div>Focus</div>
-    <div>Resilience</div>
-    <div>Sleep</div>
-    <div>Fitness</div>
-    <div>Heart</div>
-  </div>
+    const fetchLeaderboard = async () => {
+      const url = `https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(TABLE_NAME)}?sort[0][field]=Overall%20Score&sort[0][direction]=desc`;
+      const res = await fetch(url, {
+        headers: {
+          Authorization: `Bearer ${API_KEY}`
+        }
+      });
 
-  <!-- Leaderboard Entries -->
-  <div id="leaderboard" class="space-y-3"></div>
-</div>
+      const data = await res.json();
+      renderLeaderboard(data.records);
+    };
 
+    const renderLeaderboard = (records) => {
+      const tbody = document.getElementById('leaderboard-body');
+      tbody.innerHTML = '';
 
-   <!-- scores -->   
-<script>
-  const API_KEY = 'patmCpxVe4M9Sbr7k.e07989b447f501528661d099d8ed046947fd31345fc6f6de4d99b49559dc38de';
-  const BASE_ID = 'appwfMmuxK6Pu0JeR';
-  const TABLE_NAME = 'Biomarker Scores';
+      records.forEach((record, index) => {
+        const f = record.fields;
+        const avatarUrl = f.Avatar?.[0]?.url ?? '';
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${index + 1}</td>
+          <td class="flex items-center gap-3">
+            ${avatarUrl ? `<img src="${avatarUrl}" class="avatar" alt="Avatar"/>` : ''}
+            <span>${f.Alias || 'Anonymous'}</span>
+          </td>
+          <td>${f['Energy & Focus Score'] ?? '-'}</td>
+          <td>${f['Mental Resilience Score'] ?? '-'}</td>
+          <td>${f['Sleep & Recovery Score'] ?? '-'}</td>
+          <td>${f['Fitness Score'] ?? '-'}</td>
+          <td>${f['Heart & Metabolic Score'] ?? '-'}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    };
 
-  async function fetchLeaderboard() {
-    const res = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(TABLE_NAME)}?sort[0][field]=Overall%20Score&sort[0][direction]=desc`, {
-      headers: { Authorization: `Bearer ${API_KEY}` }
-    });
-
-    const data = await res.json();
-    const leaderboard = data.records;
-    const container = document.getElementById('leaderboard');
-    container.innerHTML = '';
-
-    leaderboard.forEach((record, i) => {
-      const f = record.fields;
-      const name = f.Alias || 'Anonymous';
-      const focus = f['Energy & Focus Score'] ?? 'n/a';
-      const resilience = f['Mental Resilience Score'] ?? 'n/a';
-      const sleep = f['Sleep & Recovery Score'] ?? 'n/a';
-      const fitness = f['Fitness Score'] ?? 'n/a';
-      const heart = f['Heart & Metabolic Score'] ?? 'n/a';
-      const image = f['Avatar URL'] || `https://api.dicebear.com/7.x/thumbs/svg?seed=${name}`;
-
-      const html = `
-        <div class="grid grid-cols-8 gap-4 items-center glow-box">
-          <div class="text-xl font-bold text-blue-400">#${i + 1}</div>
-          <div><img class="avatar" src="${image}" alt="${name}" /></div>
-          <div class="font-semibold">${name}</div>
-          <div>${focus}</div>
-          <div>${resilience}</div>
-          <div>${sleep}</div>
-          <div>${fitness}</div>
-          <div>${heart}</div>
-        </div>
-      `;
-      container.insertAdjacentHTML('beforeend', html);
-    });
-  }
-
-  fetchLeaderboard();
-</script>
-
+    fetchLeaderboard();
+  </script>
 </body>
 </html>
