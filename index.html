@@ -111,7 +111,7 @@
       records.forEach((record, index) => {
         const f = record.fields;
         const name = f.Alias || 'Anonymous';
-        const image = f['Avatar URL'] || `https://api.dicebear.com/7.x/thumbs/svg?seed=${encodeURIComponent(name)}`;
+        const image = f['Avatar URL'] || `https://randomuser.me/api/portraits/${index % 2 === 0 ? 'men' : 'women'}/${index % 100}.jpg`;
 
         const row = document.createElement('tr');
         row.innerHTML = `
