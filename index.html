@@ -5,8 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Metrax Leaderboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
+  <!-- Tailwind Config -->
   <script>
     tailwind.config = {
       theme: {
@@ -109,13 +110,15 @@
 
       records.forEach((record, index) => {
         const f = record.fields;
-        const avatarUrl = f.Avatar?.[0]?.url ?? '';
+        const name = f.Alias || 'Anonymous';
+        const image = f['Avatar URL'] || `https://api.dicebear.com/7.x/thumbs/svg?seed=${encodeURIComponent(name)}`;
+
         const row = document.createElement('tr');
         row.innerHTML = `
           <td>${index + 1}</td>
           <td class="flex items-center gap-3">
-            ${avatarUrl ? `<img src="${avatarUrl}" class="avatar" alt="Avatar"/>` : ''}
-            <span>${f.Alias || 'Anonymous'}</span>
+            <img src="${image}" class="avatar" alt="Avatar of ${name}" />
+            <span>${name}</span>
           </td>
           <td>${f['Energy & Focus Score'] ?? '-'}</td>
           <td>${f['Mental Resilience Score'] ?? '-'}</td>
